@@ -1,0 +1,17 @@
+{% block body %}
+    <h1>Существующие признаки</h1>
+    <table style="border: 1px solid grey;">
+        <tr>
+            <th style="border: 1px solid black">Название</th>
+            <th style="border: 1px solid black">Тип</th>
+            <th style="border: 1px solid black">Возможные значения</th>
+        </tr>
+        {% for sign in signs %}
+            <tr>
+                <td style="border: 1px solid black;">{{ sign.name }}</td>
+                <td style="border: 1px solid black;">{{ sign.type }}</td>
+                <td style="border: 1px solid black;">{{ sign.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
