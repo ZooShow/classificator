@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Sign;
 use App\Repository\SignTypeRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -51,9 +50,9 @@ class SignController extends AbstractController
     }
 
     /**
-     * @Route("/sign", name="app_sign")
+     * @Route("/sign", name="print_sign")
      */
-    public function index(): Response
+    public function printTable(): Response
     {
         $signSerialize = $this->getSignSerialize();
         return $this->render('Sign/SignesTable.html.twig', [
@@ -87,14 +86,16 @@ class SignController extends AbstractController
     {
         $form = $this->createFormBuilder()
             ->add('name', TextType::class, ['label' => 'Название '])
+            // ToDo добавить сюда типы из бд
             ->add('type', ChoiceType::class, [
                 'label' => 'Тип ',
                 'choices' => [
                     'Размерный' => 1,
                     'Скалярный' => 2,
-                    'Логический' => 3
+                    'Логический' => 3,
                 ],
             ])
+            ->add('value', TextType::class, ['label' => 'Возможные значения: '])
             ->add('save', SubmitType::class, ['label' => 'Создать признак'])
             ->getForm();
         $form->handleRequest($request);
@@ -125,7 +126,7 @@ class SignController extends AbstractController
     }
 
     /**
-     * @Route(name="error_add_sign")
+     * @Route("/sign/error", name="error_add_sign")
      */
     public function duplicateSign(): Response
     {

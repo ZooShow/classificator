@@ -1,0 +1,12 @@
+{% block body %}
+    {% if answers.error %}
+        <h1>Не указано ни одно значение признака</h1>
+    {% else %}
+        <h1>Результат классификации</h1>
+        <ul>
+            {% for answer in answers.possible_genre %}
+                <li>{{ answer.name }} с вероятностью {{ answer.intersect }}%</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

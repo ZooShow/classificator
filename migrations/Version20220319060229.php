@@ -55,11 +55,11 @@ final class Version20220319060229 extends AbstractMigration
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (2, 1,"Средний");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (3, 1,"Большой");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (4, 2, "1");');
-        $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (5, 2, "+++");');
+        $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (5, 2, "> 1");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (6, 3, "Переломная историческая эпоха");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (7, 3, "Не переломная историческая эпоха");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (8, 4, "1");');
-        $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (9, 4, "+++");');
+        $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (9, 4, "> 1");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (10, 5, "Последовательное");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (11, 5, "Рваное");');
         $this->addSql('INSERT INTO sign_bind (id, sign_id, value) VALUES (12, 6, "Да");');
