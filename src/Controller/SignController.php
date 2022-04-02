@@ -55,7 +55,7 @@ class SignController extends AbstractController
     public function printTable(): Response
     {
         $signSerialize = $this->getSignSerialize();
-        return $this->render('Sign/SignesTable.html.twig', [
+        return $this->render('Genre/SignesTable.html.twig', [
             'signs' => $signSerialize
         ]);
     }
@@ -119,7 +119,7 @@ class SignController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('app_sign');
         }
-        return $this->renderForm('Sign/SignAdd.html.twig', [
+        return $this->renderForm('Genre/SignAdd.html.twig', [
                 'form' => $form,
             ]
         );
@@ -130,6 +130,34 @@ class SignController extends AbstractController
      */
     public function duplicateSign(): Response
     {
-        return $this->render('Sign/SignError.html.twig', []);
+        return $this->render('Genre/SignError.html.twig', []);
+    }
+
+    /**
+     * @Route("/sign/delete", name="delete_sign")
+     */
+    public function deleteSign(Request $request): Response
+    {
+        $signSerialize = [];
+        $form = $this->createFormBuilder();
+        $signs = $this->signRepository->findAll();
+        $i = 0;
+        foreach ($signs as $sign) {
+            $form->add($sign->getId(),
+                SubmitType::class,
+                [
+                    'label' => 'Удаилть',
+                    'id' => $sign->getId()
+                ]);
+            ++$i;
+        }
+        $form = $form->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            dd($form->getData());
+        }
+        return $this->renderForm('/Genre/SignDelete.html.twig', [
+            'form' => $form,
+        ]);
     }
 }

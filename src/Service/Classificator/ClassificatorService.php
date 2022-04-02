@@ -103,7 +103,7 @@ class ClassificatorService
      * @param array $signBinds
      * @return array
      */
-    private function removeNullValue(array $signBinds): array
+    public function removeNullValue(array $signBinds): array
     {
         $tmp = [];
         foreach ($signBinds as $signBind) {

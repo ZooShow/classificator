@@ -1,0 +1,19 @@
+{% block body %}
+    <h1>Существующие жанры</h1>
+    <table style="border: 1px solid grey;">
+        <tr>
+            <th style="border: 1px solid black">Название</th>
+            <th style="border: 1px solid black">Признаки</th>
+        </tr>
+        {% for genre in genres %}
+            <tr>
+                <td style="border: 1px solid black;">{{ genre.name }}</td>
+                <td style="border: 1px solid black;">
+                    {% for sign in genre.value %}
+                        {{ sign.name }}: {{ sign.value }} <br>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

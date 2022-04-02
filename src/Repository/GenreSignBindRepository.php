@@ -45,6 +45,11 @@ class GenreSignBindRepository extends ServiceEntityRepository
         }
     }
 
+    public function flushAll(): void
+    {
+        $this->_em->flush();
+    }
+
     // /**
     //  * @return GenreSignBind[] Returns an array of GenreSignBind objects
     //  */

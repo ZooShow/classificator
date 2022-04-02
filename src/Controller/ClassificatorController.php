@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\SignBindRepository;
 use App\Repository\SignRepository;
 use App\Service\Classificator\ClassificatorService;
+use App\Service\Form\FormService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -21,10 +22,14 @@ class ClassificatorController extends AbstractController
      */
     private ClassificatorService $classificatorService;
 
-    public function __construct(
-        ClassificatorService $classificatorService
-    ) {
-        $this->classificatorService = $classificatorService;
+    /**
+     * @var FormService
+     */
+    private FormService $formService;
+
+    public function __construct(FormService $formService)
+    {
+        $this->formService = $formService;
     }
 
     /**
@@ -32,26 +37,12 @@ class ClassificatorController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $signSerialize = $this->classificatorService->prepareSignBindToForm();
         $form = $this->createFormBuilder();
-        $i = 0;
-        foreach ($signSerialize as $serialize) {
-            $form->add('value' . $i, ChoiceType::class, [
-                'label' => $serialize['name'] . ' ',
-                'choices' => $serialize['value'],
-            ]);
-            ++$i;
-        }
-        $form->add(
-            'save',
-            SubmitType::class,
-            ['label' => 'Классифицировать']
-        );
+        $form = $this->formService->makeGenreForm($form,'Классифицировать');
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $classificationArray = $this->classificatorService->getClassification($form->getData());
-//            dd($classificationArray);
             return $this->render('/Classificator/ClassificatorAnswer.html.twig', [
                 'answers' => $classificationArray
             ]);
