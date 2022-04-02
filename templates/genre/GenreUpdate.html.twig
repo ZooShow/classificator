@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<title>{{ title }}</title>
+
+{% block body %}
+    {{ form(form) }}
+    <ul>
+        {% for sign in signs %}
+            <li>
+                {{ sign.name }}: {{ sign.value }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

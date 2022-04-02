@@ -36,4 +36,23 @@ class FormService
         );
         return $form;
     }
+
+    public function makeGenreFormForUpdate(FormBuilder $form, string $label): FormBuilder
+    {
+        $signSerialize = $this->classificatorService->prepareSignBindToForm();
+        $i = 0;
+        foreach ($signSerialize as $serialize) {
+            $form->add('value' . $i, ChoiceType::class, [
+                'label' => $serialize['name'] . ' ',
+                'choices' => $serialize['value'],
+            ]);
+            ++$i;
+        }
+        $form->add(
+            'save',
+            SubmitType::class,
+            ['label' => $label]
+        );
+        return $form;
+    }
 }

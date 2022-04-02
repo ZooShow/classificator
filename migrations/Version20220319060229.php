@@ -36,7 +36,7 @@ final class Version20220319060229 extends AbstractMigration
         $this->addSql('INSERT INTO genre (id, name) VALUES (10, "Роман-эпопея");');
         // признаки
         $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (1, "Объем произведения", 2);');
-        $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (2, "Количество централььных персонажей", 1);');
+        $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (2, "Количество центральных персонажей", 1);');
         $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (3, "Время действия", 2);');
         $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (4, "Количестов проблем, поднимаемых в произведении", 1);');
         $this->addSql('INSERT INTO sign (id, name, sign_type_id) VALUES (5, "Последовательность повествования", 2);');

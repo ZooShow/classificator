@@ -7,6 +7,7 @@ use App\Entity\GenreSignBind;
 use App\Entity\SignBind;
 use App\Repository\GenreRepository;
 use App\Repository\GenreSignBindRepository;
+use App\Repository\SignBindRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
@@ -19,18 +20,46 @@ class GenreService
 
     private GenreSignBindRepository $genreSignBindRepository;
 
+    private SignBindRepository $signBindRepository;
+
     public function __construct(
         GenreRepository $genreRepository,
         EntityManagerInterface $entityManager,
-        GenreSignBindRepository $genreSignBindRepository
+        GenreSignBindRepository $genreSignBindRepository,
+        SignBindRepository $signBindRepository
     ) {
         $this->genreRepository = $genreRepository;
         $this->entityManager = $entityManager;
         $this->genreSignBindRepository = $genreSignBindRepository;
+        $this->signBindRepository = $signBindRepository;
+    }
+
+    public function updateGenre(int $id, array $formData): bool
+    {
+        if (count($formData) === 0) {
+            return false;
+        }
+        $genre = $this->genreRepository->find($id);
+        $genreSignBind = $this->genreSignBindRepository->findBy(['genre' => $genre]);
+        foreach ($genreSignBind as $item) {
+            $this->genreSignBindRepository->remove($item, false);
+        }
+        $this->genreSignBindRepository->flushAll();
+        foreach ($formData as $item) {
+            $genreSignBindNew = new GenreSignBind();
+            $signBind = $this->signBindRepository->find($item);
+            $genreSignBindNew->setGenre($genre);
+            $genreSignBindNew->setSignBind($signBind);
+            $this->genreSignBindRepository->add($genreSignBindNew);
+        }
+        return true;
     }
 
     public function addNewGenre(array $formData): bool
     {
+        if (count($formData) === 0) {
+            return false;
+        }
         $name = $formData[0];
         $genreDuplicate = $this->genreRepository->findOneBy(['name' => $name]);
         if ($genreDuplicate) {
@@ -97,6 +126,21 @@ class GenreService
         }
         $this->genreSignBindRepository->flushAll();
         $this->genreRepository->remove($genre);
-//        dd($genreSignBind);
+    }
+
+    public function getSignForGenre(int $id): array
+    {
+        $genre = $this->genreRepository->find($id);
+        $genreSignBinds = $this->genreSignBindRepository->findBy(['genre' => $genre]);
+        $bindSerialize = [];
+        foreach ($genreSignBinds as $genreSignBind) {
+            $genreSignBindSerialize = $genreSignBind->getSignBind();
+            $bindSerialize [] = [
+                'name' => $genreSignBindSerialize->getSign()->getName(),
+                'value' => $genreSignBindSerialize->getValue()
+            ];
+
+        }
+        return $bindSerialize;
     }
 }

@@ -55,7 +55,7 @@ class SignController extends AbstractController
     public function printTable(): Response
     {
         $signSerialize = $this->getSignSerialize();
-        return $this->render('Genre/SignesTable.html.twig', [
+        return $this->render('Sign/SignesTable.html.twig', [
             'signs' => $signSerialize
         ]);
     }
@@ -119,7 +119,7 @@ class SignController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('app_sign');
         }
-        return $this->renderForm('Genre/SignAdd.html.twig', [
+        return $this->renderForm('Sign/SignAdd.html.twig', [
                 'form' => $form,
             ]
         );
@@ -130,7 +130,7 @@ class SignController extends AbstractController
      */
     public function duplicateSign(): Response
     {
-        return $this->render('Genre/SignError.html.twig', []);
+        return $this->render('Sign/SignError.html.twig', []);
     }
 
     /**
@@ -156,7 +156,7 @@ class SignController extends AbstractController
         if ($form->isSubmitted()) {
             dd($form->getData());
         }
-        return $this->renderForm('/Genre/SignDelete.html.twig', [
+        return $this->renderForm('/Sign/SignDelete.html.twig', [
             'form' => $form,
         ]);
     }
