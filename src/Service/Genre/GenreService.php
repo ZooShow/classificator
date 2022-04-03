@@ -34,10 +34,13 @@ class GenreService
         $this->signBindRepository = $signBindRepository;
     }
 
-    public function updateGenre(int $id, array $formData): bool
+    public function updateGenre(int $id, array $formData): array
     {
         if (count($formData) === 0) {
-            return false;
+            return [
+                'title' => 'Изменение жанра',
+                'message' => 'У жанра должен быть хотя бы один признак!'
+            ];
         }
         $genre = $this->genreRepository->find($id);
         $genreSignBind = $this->genreSignBindRepository->findBy(['genre' => $genre]);
@@ -52,18 +55,27 @@ class GenreService
             $genreSignBindNew->setSignBind($signBind);
             $this->genreSignBindRepository->add($genreSignBindNew);
         }
-        return true;
+        return [
+            'title' => 'Изменение жанра',
+            'message' => 'Жанр ' . $genre->getName() . ' успешно изменен!'
+        ];
     }
 
-    public function addNewGenre(array $formData): bool
+    public function addNewGenre(array $formData): array
     {
         if (count($formData) === 0) {
-            return false;
+            return [
+                'title' => 'Добавление жанра',
+                'message' => 'У жанра должен быть хотя бы один признак!'
+            ];
         }
         $name = $formData[0];
         $genreDuplicate = $this->genreRepository->findOneBy(['name' => $name]);
         if ($genreDuplicate) {
-            return false;
+            return [
+                'title' => 'Добавление жанра',
+                'message' => 'Жанра с таким именем уже существует!'
+            ];
         }
         $genre = new Genre();
         $genre->setName($name);
@@ -79,7 +91,10 @@ class GenreService
             $this->genreSignBindRepository->add($genreSignBind, false);
         }
         $this->genreSignBindRepository->flushAll();
-        return true;
+        return [
+            'title' => 'Добавление жанра',
+            'message' => 'Жанр ' . $name . ' успешно добавлен!'
+        ];
     }
 
     public function getAllGenres(): array
@@ -117,7 +132,7 @@ class GenreService
         return $tmp;
     }
 
-    public function deleteGenre(int $id)
+    public function deleteGenre(int $id): array
     {
         $genre = $this->genreRepository->find($id);
         $genreSignBind = $this->genreSignBindRepository->findBy(['genre' => $genre]);
@@ -126,6 +141,10 @@ class GenreService
         }
         $this->genreSignBindRepository->flushAll();
         $this->genreRepository->remove($genre);
+        return [
+            'title' => 'Удаление жанра',
+            'message' => 'Жанр ' . $genre->getName() . ' успешно удален!'
+        ];
     }
 
     public function getSignForGenre(int $id): array

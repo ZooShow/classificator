@@ -27,9 +27,13 @@ class ClassificatorController extends AbstractController
      */
     private FormService $formService;
 
-    public function __construct(FormService $formService)
+    public function __construct(
+        FormService $formService,
+        ClassificatorService $classificatorService
+    )
     {
         $this->formService = $formService;
+        $this->classificatorService = $classificatorService;
     }
 
     /**
@@ -44,12 +48,14 @@ class ClassificatorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $classificationArray = $this->classificatorService->getClassification($form->getData());
             return $this->render('/Classificator/ClassificatorAnswer.html.twig', [
-                'answers' => $classificationArray
+                'answers' => $classificationArray,
+                'title' => 'Классифицировать'
             ]);
         }
         {
             return $this->renderForm('Classificator/Classificator.html.twig', [
                 'form' => $form,
+                'title' => 'Классифицировать'
             ]);
         }
     }

@@ -45,6 +45,11 @@ class SignBindRepository extends ServiceEntityRepository
         }
     }
 
+    public function flushAll(): void
+    {
+        $this->_em->flush();
+    }
+
     // /**
     //  * @return SignBind[] Returns an array of SignBind objects
     //  */

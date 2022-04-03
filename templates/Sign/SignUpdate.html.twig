@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<title>{{ title }}</title>
+
+{% block body %}
+    {{ form(form) }}
+    <br>
+    <p>Предыдущие значения:</p>
+    <ul>
+        {% for sign in signs %}
+            <li>
+                {{ sign }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

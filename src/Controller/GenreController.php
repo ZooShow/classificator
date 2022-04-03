@@ -45,6 +45,7 @@ class GenreController extends AbstractController
     {
         $genreArray = $this->genreService->getAllGenres();
         return $this->render('genre/GenreTable.html.twig', [
+            'title' => 'Просмотр жанров',
             'genres' => $genreArray
         ]);
     }
@@ -63,12 +64,13 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->classificatorService->removeNullValue($form->getData());
-            $error = $this->genreService->addNewGenre($formData);
-                return $this->render('genre/GenreAddingAnswer.html.twig', [
-                    'error' => $error
+            $answer = $this->genreService->addNewGenre($formData);
+                return $this->render('Answer.html.twig', [
+                    'answer' => $answer
                 ]);
         }
         return $this->renderForm('genre/GenreAdd.html.twig', [
+            'title' => 'Добавить жанр',
             'form' => $form
         ]);
     }
@@ -81,7 +83,7 @@ class GenreController extends AbstractController
         $genreArray = $this->genreService->prepareGenreForDelete();
         $form = $this->createFormBuilder();
         $form->add('genre', ChoiceType::class, [
-            'label' => 'Выберите жанр',
+            'label' => 'Изменить жанр',
             'choices' => $genreArray
         ]);
         $form->add('select', SubmitType::class, ['label' => 'Выбрать жанр']);
@@ -92,6 +94,7 @@ class GenreController extends AbstractController
             return $this->redirectToRoute('genre_update_by_id', ['id' => $id]);
         }
         return $this->renderForm('genre/GenreDelete.html.twig', [
+            'title' => 'Изменить жанр',
             'form' => $form
         ]);
     }
@@ -109,15 +112,17 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $this->classificatorService->removeNullValue($form->getData());
-            $error = $this->genreService->updateGenre($id, $formData);
-            return $this->render('genre/GenreUpdatingAnswer.html.twig', [
-                'error' => $error
+            $answer = $this->genreService->updateGenre($id, $formData);
+            return $this->render('Answer.html.twig', [
+                'title' => 'Изменить жанр',
+                'answer' => $answer
             ]);
         }
         return $this->renderForm('genre/GenreUpdate.html.twig', [
             'form' => $form,
             'name' => $this->genreRepository->find($id)->getName(),
-            'signs' => $signForGenre
+            'signs' => $signForGenre,
+            'title' => 'Изменить жанр'
         ]);
     }
 
@@ -137,11 +142,15 @@ class GenreController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $id = $form->getData()['genre'];
-            $this->genreService->deleteGenre($id);
-            return $this->render('/genre/GenreDeletingAnswer.html.twig');
+            $answer = $this->genreService->deleteGenre($id);
+            return $this->render('Answer.html.twig', [
+                'title' => 'Удалить жанр',
+                'answer' => $answer
+            ]);
         }
         return $this->renderForm('genre/GenreDelete.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'title' => 'Удалить жанр'
         ]);
     }
 }
