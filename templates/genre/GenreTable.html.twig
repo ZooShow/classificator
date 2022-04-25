@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-
-<title>{{ title }}</title>
+{% extends 'base.html.twig' %}
 
 {% block body %}
     <h1>Существующие жанры</h1>
-    <table style="border: 1px solid grey;">
+    <table class="table table-striped table-bordered">
         <tr>
-            <th style="border: 1px solid black">Название</th>
-            <th style="border: 1px solid black">Признаки</th>
+            <th class="table-bordered">Название</th>
+            <th class="table-bordered">Признаки</th>
         </tr>
         {% for genre in genres %}
             <tr>
-                <td style="border: 1px solid black;">{{ genre.name }}</td>
-                <td style="border: 1px solid black;">
+                <td class="table-bordered">{{ genre.name }}</td>
+                <td class="table-bordered">
                     {% for sign in genre.value %}
                         {{ sign.name }}: {{ sign.value }} <br>
                     {% endfor %}

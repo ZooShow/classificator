@@ -25,6 +25,7 @@ class MainController extends AbstractController
     {
         return $this->render('main/index.html.twig', [
             'domain' => $this->domain,
+            'title' => 'Классификатор'
         ]);
     }
 }

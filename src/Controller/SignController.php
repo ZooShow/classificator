@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sign;
-use App\Repository\SignTypeRepository;
 use App\Service\Sign\SignService;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,30 +12,17 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\SignRepository;
-use App\Repository\SignBindRepository;
 
 class SignController extends AbstractController
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private ManagerRegistry $managerRegistry;
-
     /**
      * @var SignService
      */
     private SignService $signService;
 
     public function __construct(
-        SignBindRepository $signBindRepository,
-        SignTypeRepository $signTypeRepository,
-        ManagerRegistry $managerRegistry,
         SignService $signService
     ) {
-        $this->signBindRepository = $signBindRepository;
-        $this->signTypeRepository = $signTypeRepository;
-        $this->managerRegistry = $managerRegistry;
         $this->signService = $signService;
     }
 
@@ -66,8 +51,12 @@ class SignController extends AbstractController
                     'Скалярный' => 2,
                     'Логический' => 3,
                 ],
+                'attr' => ['class' => "form-select"]
             ])
-            ->add('save', SubmitType::class, ['label' => 'Выбрать тип признака']);
+            ->add('save', SubmitType::class, [
+                'label' => 'Выбрать тип признака',
+                'attr' => ['class' => "btn btn-primary"]
+            ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -88,12 +77,19 @@ class SignController extends AbstractController
     public function showAddSign(Request $request, int $id): ?Response
     {
         $form = $this->createFormBuilder()
-            ->add('name', TextType::class, ['label' => 'Название признака']);
+            ->add('name', TextType::class, ['label' => 'Название признака ']);
         if ($id === 2) {
-            $form->add('value', TextareaType::class,
-                ['label' => 'Возможные значения(каждое значение с новой строки): ']);
+            $form->add('value', TextareaType::class, [
+                'label' => 'Возможные значения(каждое значение с новой строки): ',
+                'attr' => [
+                    'style' => 'height: 500px, width: 500px'
+                ]
+            ]);
         }
-        $form = $form->add('save', SubmitType::class, ['label' => 'Добавить признак'])
+        $form = $form->add('save', SubmitType::class, [
+            'label' => 'Добавить признак',
+            'attr' => ['class' => "btn btn-primary"]
+        ])
             ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,6 +107,7 @@ class SignController extends AbstractController
                     break;
             }
             return $this->render('Answer.html.twig', [
+                'title' => 'Добавить признак',
                 'answer' => $answer
             ]);
         }
@@ -131,9 +128,13 @@ class SignController extends AbstractController
         $form = $this->createFormBuilder();
         $form->add('sign', ChoiceType::class, [
             'label' => 'Выберите признак',
-            'choices' => $signArray
+            'choices' => $signArray,
+            'attr' => ['class' => "form-select"]
         ]);
-        $form->add('delete', SubmitType::class, ['label' => 'Удалить ']);
+        $form->add('delete', SubmitType::class, [
+            'label' => 'Удалить ',
+            'attr' => ['class' => "btn btn-primary"]
+        ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -159,9 +160,13 @@ class SignController extends AbstractController
         $form = $this->createFormBuilder();
         $form->add('sign', ChoiceType::class, [
             'label' => 'Изменить признак',
-            'choices' => $signArray
+            'choices' => $signArray,
+            'attr' => ['class' => "form-select"]
         ]);
-        $form->add('select', SubmitType::class, ['label' => 'Выбрать признак']);
+        $form->add('select', SubmitType::class, [
+            'label' => 'Выбрать признак',
+            'attr' => ['class' => "btn btn-primary"]
+        ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -182,7 +187,10 @@ class SignController extends AbstractController
     {
         $signForGenre = $this->signService->getSignBind($id);
         $form = $this->createFormBuilder();
-        $form->add('value', TextareaType::class, ['label' => 'Возможные значения(каждое значение с новой строки): ']);
+        $form->add('value', TextareaType::class, [
+            'label' => 'Возможные значения(каждое значение с новой строки): ',
+
+        ]);
         $form->add('type', ChoiceType::class, [
             'label' => 'Выберите тип признака, который хотите создать ',
             'choices' => [
@@ -190,13 +198,16 @@ class SignController extends AbstractController
                 'Скалярный' => 2,
                 'Логический' => 3,
             ],
+            'attr' => ['class' => "form-select"]
         ]);
-        $form->add('update', SubmitType::class, ['label' => 'Изменить']);
+        $form->add('update', SubmitType::class, [
+            'label' => 'Изменить',
+            'attr' => ['class' => "btn btn-primary"]
+        ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $answer = $this->signService->updateSign($id, $form->getData());
-//            dd();
             return $this->render('Answer.html.twig', [
                 'title' => 'Изменить жанр',
                 'answer' => $answer

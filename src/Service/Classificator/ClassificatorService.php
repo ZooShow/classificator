@@ -54,25 +54,40 @@ class ClassificatorService
         if (count($signBinds) === 0) {
             return [
                 'error' => true,
-                'possible_genre' => []
+                'possible_genre' => [],
+                'message' => 'Не введен ни один признак!'
             ];
         }
+
         $genreSignBinds = $this->getGenreSignBindArray();
-        $tmp = [];
+
+        $tmp2 = [];
         foreach ($genreSignBinds as $genreSignBind) {
-            $tmp[] = [
+            $tmp2[] = [
                 'name' => $genreSignBind['name'],
-                'intersect' =>(int)
-                (count(array_intersect($signBinds, $genreSignBind['signBind']))/count($genreSignBind['signBind']) * 100)
+                'intersect' => array_diff($signBinds, $genreSignBind['signBind']),
             ];
         }
-        usort($tmp, function ($a1, $a2) {
-            return $a2['intersect'] <=> $a1['intersect'];
-        });
+
+        /** если только одно значение */
         return [
             'error' => false,
-            'possible_genre' => $tmp
+            'possible_genre' => $this->onlyOne($tmp2),
+            'message' => null
         ];
+    }
+
+    private function onlyOne(array $intersect): array
+    {
+        $tmp = [];
+        foreach ($intersect as $item) {
+            if (count($item['intersect']) === 0) {
+                $tmp[] = [
+                    'name' => $item['name']
+                ];
+            }
+        }
+        return $tmp;
     }
 
     /**

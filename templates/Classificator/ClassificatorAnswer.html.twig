@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-
-<title>{{ title }}</title>
+{% extends 'base.html.twig' %}
 
 {% block body %}
     {% if answers.error %}
-        <h1>Не указано ни одно значение признака</h1>
+        <h1>{{ answers.message }}</h1>
     {% else %}
         <h1>Результат классификации</h1>
-        <ul>
-            {% for answer in answers.possible_genre %}
-                <li>{{ answer.name }} с вероятностью {{ answer.intersect }}%</li>
-            {% endfor %}
-        </ul>
+        {% if answers.possible_genre|length > 0 %}
+            <ul>
+                {% for answer in answers.possible_genre %}
+                    <li>{{ answer.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h3>Не удалось найти жанр с такими признаками</h3>
+        {% endif %}
     {% endif %}
 {% endblock %}

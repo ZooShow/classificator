@@ -70,6 +70,13 @@ class GenreService
             ];
         }
         $name = $formData[0];
+        if (empty($name)) {
+            return [
+                'title' => 'Добавление жанра',
+                'message' => 'Имя не должно начинаться с пробела!'
+            ];
+        }
+
         $genreDuplicate = $this->genreRepository->findOneBy(['name' => $name]);
         if ($genreDuplicate) {
             return [
@@ -125,9 +132,7 @@ class GenreService
         $genres = $this->genreRepository->findAll();
         $tmp = [];
         foreach ($genres as $genre) {
-            $tmp[] = [
-                $genre->getName() => $genre->getId()
-            ];
+            $tmp[$genre->getName()] = (int)$genre->getId();
         }
         return $tmp;
     }

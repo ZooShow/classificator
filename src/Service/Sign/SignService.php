@@ -32,8 +32,7 @@ class SignService
         SignTypeRepository $signTypeRepository,
         SignBindRepository $signBindRepository,
         GenreSignBindRepository $genreSignBindRepository
-    )
-    {
+    ) {
         $this->signRepository = $signRepository;
         $this->signTypeRepository = $signTypeRepository;
         $this->signBindRepository = $signBindRepository;
@@ -42,6 +41,12 @@ class SignService
 
     public function addRazmerniy(string $name): array
     {
+        if (empty($name)) {
+            return [
+                'title' => 'Добавление признака',
+                'message' => 'Имя не должно начинаться с пробела!'
+            ];
+        }
         $duplicate = $this->signRepository->findBy(['name' => $name]);
         if ($duplicate) {
             return [
@@ -73,6 +78,13 @@ class SignService
 
     public function addLogical(string $name): array
     {
+        if (empty($name)) {
+            return [
+                'title' => 'Добавление признака',
+                'message' => 'Имя не должно начинаться с пробела!'
+            ];
+        }
+
         $duplicate = $this->signRepository->findBy(['name' => $name]);
         if ($duplicate) {
             return [
@@ -106,6 +118,14 @@ class SignService
     public function addScalarniy(array $data): array
     {
         $name = $data['name'];
+
+        if (empty($name)) {
+            return [
+                'title' => 'Добавление признака',
+                'message' => 'Имя не должно начинаться с пробела!'
+            ];
+        }
+
         $duplicate = $this->signRepository->findBy(['name' => $name]);
         if ($duplicate) {
             return [
@@ -115,19 +135,25 @@ class SignService
         }
         $type = $this->signTypeRepository->find(2);
 
+        $strSplit = explode("\r\n", $data['value']);
         $sign = new Sign();
         $sign->setName($name);
         $sign->setSignType($type);
         $this->signRepository->add($sign);
-
-        $strSplit = explode("\r\n", $data['value']);
+        $tmp = [];
         foreach ($strSplit as $item) {
+            if (!empty($item)) {
+                if ($item[0] !== ' ') {
+                    $tmp[] = $item;
+                }
+            }
+        }
+        foreach ($tmp as $item) {
             $signBind = new SignBind();
             $signBind->setSign($sign);
             $signBind->setValue($item);
             $this->signBindRepository->add($signBind);
         }
-//        dd($strSplit);
         return [
             'title' => 'Добавление признака',
             'message' => 'Признак ' . $name . ' успешно добавлен!'
@@ -158,9 +184,7 @@ class SignService
         $signs = $this->signRepository->findAll();
         $tmp = [];
         foreach ($signs as $sign) {
-            $tmp[] = [
-                $sign->getName() => $sign->getId()
-            ];
+            $tmp[$sign->getName()] = $sign->getId();
         }
         return $tmp;
     }

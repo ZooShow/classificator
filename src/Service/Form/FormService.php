@@ -26,13 +26,16 @@ class FormService
             $form->add('value' . $i, ChoiceType::class, [
                 'label' => $serialize['name'] . ' ',
                 'choices' => $serialize['value'],
+                'attr' => ['class' => "form-select"]
             ]);
             ++$i;
         }
         $form->add(
             'save',
-            SubmitType::class,
-            ['label' => $label]
+            SubmitType::class, [
+                'label' => $label,
+                'attr' => ['class' => "btn btn-primary"]
+            ]
         );
         return $form;
     }

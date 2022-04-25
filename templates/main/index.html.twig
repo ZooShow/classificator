@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-
-<title>Hello MainController!</title>
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <p><a href="{{ domain }}classificator">Классифицировать</a></p>
-    <p><a href="{{ domain }}sign">Посмотреть таблицу признаков</a></p>
-    <p><a href="{{ domain }}sign/add">Добавить признак</a></p>
-    <p><a href="{{ domain }}sign/delete">Удалить признак</a></p>
-    <p><a href="{{ domain }}sign/update">Изменить признак</a></p>
-    <p><a href="{{ domain }}genre">Посмотреть таблицу жанров</a></p>
-    <p><a href="{{ domain }}genre/add">Добавить жанр</a></p>
-    <p><a href="{{ domain }}genre/delete">Удалить жанр</a></p>
-    <p><a href="{{ domain }}genre/update">Изменить жанр</a></p>
+    <li><a href="{{ domain }}classificator">Классифицировать</a></li>
+    <li><a href="{{ domain }}sign">Посмотреть таблицу признаков</a></li>
+    <li><a href="{{ domain }}sign/add">Добавить признак</a></li>
+    <li><a href="{{ domain }}sign/delete">Удалить признак</a></li>
+    <li><a href="{{ domain }}sign/update">Изменить признак</a></li>
+    <li><a href="{{ domain }}genre">Посмотреть таблицу жанров</a></li>
+    <li><a href="{{ domain }}genre/add">Добавить жанр</a></li>
+    <li><a href="{{ domain }}genre/delete">Удалить жанр</a></li>
+    <li><a href="{{ domain }}genre/update">Изменить жанр</a></li>
 {% endblock %}

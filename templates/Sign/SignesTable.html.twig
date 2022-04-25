@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-
-<title>{{ title }}</title>
+{% extends 'base.html.twig' %}
 
 {% block body %}
     <h1>Существующие признаки</h1>
-    <table style="border: 1px solid grey;">
+    <table class="table table-striped table-bordered">
         <tr>
-            <th style="border: 1px solid black">Название</th>
-            <th style="border: 1px solid black">Тип</th>
-            <th style="border: 1px solid black">Возможные значения</th>
+            <th class="table-bordered">Название</th>
+            <th class="table-bordered">Тип</th>
+            <th class="table-bordered">Возможные значения</th>
         </tr>
         {% for sign in signs %}
             <tr>
-                <td style="border: 1px solid black;">{{ sign.name }}</td>
-                <td style="border: 1px solid black;">{{ sign.type }}</td>
-                <td style="border: 1px solid black;">{{ sign.value }}</td>
+                <td class="table-bordered">{{ sign.name }}</td>
+                <td class="table-bordered">{{ sign.type }}</td>
+                <td class="table-bordered">{{ sign.value }}</td>
             </tr>
         {% endfor %}
     </table>

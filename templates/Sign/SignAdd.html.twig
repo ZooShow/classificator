@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-
-<title>{{ title }}</title>
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    {#    <form action=""> #}
-    {#        <span>Название признака</span> #}
-    {#        <input type="text", id="name", name="name"> #}
-    {#        <br> #}
-    {#        <button type="submit"> #}
-    {#            Создать признак #}
-    {#        </button> #}
-    {#        <br> #}
-    {#        <button type="button">+</button> #}
-    {#    </form> #}
     {% if id == 1 %}
         <span>Значения будут добавлены по умолчанию: 1, >1</span>
     {% elseif id == 2 %}

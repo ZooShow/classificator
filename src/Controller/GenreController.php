@@ -57,8 +57,10 @@ class GenreController extends AbstractController
     {
         $form = $this->createFormBuilder();
         $form->add('name',
-            TextType::class,
-            ['label' => 'Название класса']);
+            TextType::class, [
+                'label' => 'Название класса: ',
+                'attr' => ['class' => "form-floating"]
+            ]);
         $form = $this->formService->makeGenreForm($form, 'Создать жанр');
         $form = $form->getForm();
         $form->handleRequest($request);
@@ -66,7 +68,8 @@ class GenreController extends AbstractController
             $formData = $this->classificatorService->removeNullValue($form->getData());
             $answer = $this->genreService->addNewGenre($formData);
                 return $this->render('Answer.html.twig', [
-                    'answer' => $answer
+                    'answer' => $answer,
+                    'title' => 'Добавить жанр'
                 ]);
         }
         return $this->renderForm('genre/GenreAdd.html.twig', [
@@ -84,9 +87,13 @@ class GenreController extends AbstractController
         $form = $this->createFormBuilder();
         $form->add('genre', ChoiceType::class, [
             'label' => 'Изменить жанр',
-            'choices' => $genreArray
+            'choices' => $genreArray,
+            'attr' => ['class' => "form-select"]
         ]);
-        $form->add('select', SubmitType::class, ['label' => 'Выбрать жанр']);
+        $form->add('select', SubmitType::class, [
+            'label' => 'Выбрать жанр',
+            'attr' => ['class' => "btn btn-primary"]
+            ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -135,9 +142,13 @@ class GenreController extends AbstractController
         $form = $this->createFormBuilder();
         $form->add('genre', ChoiceType::class, [
             'label' => 'Выберите жанр',
-            'choices' => $genreArray
+            'choices' => $genreArray,
+            'attr' => ['class' => "form-select"]
         ]);
-        $form->add('delete', SubmitType::class, ['label' => 'Удалить жанр']);
+        $form->add('delete', SubmitType::class, [
+            'label' => 'Удалить жанр',
+            'attr' => ['class' => "btn btn-primary"]
+        ]);
         $form = $form->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -145,7 +156,7 @@ class GenreController extends AbstractController
             $answer = $this->genreService->deleteGenre($id);
             return $this->render('Answer.html.twig', [
                 'title' => 'Удалить жанр',
-                'answer' => $answer
+                'answer' => $answer,
             ]);
         }
         return $this->renderForm('genre/GenreDelete.html.twig', [
