@@ -6,6 +6,7 @@ use App\Repository\SignBindRepository;
 use App\Repository\SignRepository;
 use App\Service\Classificator\ClassificatorService;
 use App\Service\Form\FormService;
+use App\Service\FullnesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -17,23 +18,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ClassificatorController extends AbstractController
 {
-    /**
-     * @var ClassificatorService
-     */
     private ClassificatorService $classificatorService;
 
-    /**
-     * @var FormService
-     */
     private FormService $formService;
+
+    private FullnesService $fullnesService;
 
     public function __construct(
         FormService $formService,
-        ClassificatorService $classificatorService
-    )
-    {
+        ClassificatorService $classificatorService,
+        FullnesService $fullnesService
+    ) {
         $this->formService = $formService;
         $this->classificatorService = $classificatorService;
+        $this->fullnesService = $fullnesService;
     }
 
     /**
@@ -41,22 +39,23 @@ class ClassificatorController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $form = $this->createFormBuilder();
-        $form = $this->formService->makeGenreForm($form,'Классифицировать');
-        $form = $form->getForm();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $classificationArray = $this->classificatorService->getClassification($form->getData());
-            return $this->render('/Classificator/ClassificatorAnswer.html.twig', [
-                'answers' => $classificationArray,
-                'title' => 'Классифицировать'
-            ]);
+        $form = null;
+        if ($this->fullnesService->checkDB()) {
+            $form = $this->createFormBuilder();
+            $form = $this->formService->makeGenreForm($form, 'Классифицировать');
+            $form = $form->getForm();
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $classificationArray = $this->classificatorService->getClassification($form->getData());
+                return $this->render('/Classificator/ClassificatorAnswer.html.twig', [
+                    'answers' => $classificationArray,
+                    'title' => 'Классифицировать'
+                ]);
+            }
         }
-        {
-            return $this->renderForm('Classificator/Classificator.html.twig', [
-                'form' => $form,
-                'title' => 'Классифицировать'
-            ]);
-        }
+        return $this->renderForm('Classificator/Classificator.html.twig', [
+            'form' => $form,
+            'title' => 'Классифицировать'
+        ]);
     }
 }

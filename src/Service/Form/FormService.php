@@ -3,6 +3,7 @@
 namespace App\Service\Form;
 
 use App\Service\Classificator\ClassificatorService;
+use App\Service\FullnesService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Validator\Constraints\Form;
@@ -12,12 +13,14 @@ class FormService
 {
     private ClassificatorService $classificatorService;
 
-    public function __construct(ClassificatorService $classificatorService)
+    public function __construct(
+        ClassificatorService $classificatorService
+    )
     {
         $this->classificatorService = $classificatorService;
     }
 
-    public function makeGenreForm(FormBuilder $form, string $label): FormBuilder
+    public function makeGenreForm(FormBuilder $form, string $label): ?FormBuilder
     {
         $signSerialize = $this->classificatorService->prepareSignBindToForm();
 
@@ -54,7 +57,10 @@ class FormService
         $form->add(
             'save',
             SubmitType::class,
-            ['label' => $label]
+            [
+                'label' => $label,
+                'attr' => ['class' => "btn btn-primary"]
+            ]
         );
         return $form;
     }

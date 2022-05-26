@@ -2,6 +2,7 @@
 
 {% block body %}
     {{ form(form) }}
+    <p> Предыдущие значения для жанра {{ name }}:</p>
     <ul>
         {% for sign in signs %}
             <li>

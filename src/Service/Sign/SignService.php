@@ -39,12 +39,12 @@ class SignService
         $this->genreSignBindRepository = $genreSignBindRepository;
     }
 
-    public function addRazmerniy(string $name): array
+    public function addRazmerniy(?string $name): array
     {
         if (empty($name)) {
             return [
                 'title' => 'Добавление признака',
-                'message' => 'Имя не должно начинаться с пробела!'
+                'message' => 'Имя не должно состоять только из пробелов!'
             ];
         }
         $duplicate = $this->signRepository->findBy(['name' => $name]);
@@ -76,12 +76,12 @@ class SignService
         ];
     }
 
-    public function addLogical(string $name): array
+    public function addLogical(?string $name): array
     {
         if (empty($name)) {
             return [
                 'title' => 'Добавление признака',
-                'message' => 'Имя не должно начинаться с пробела!'
+                'message' => 'Имя не должно состоять только из пробелов!'
             ];
         }
 
@@ -122,7 +122,7 @@ class SignService
         if (empty($name)) {
             return [
                 'title' => 'Добавление признака',
-                'message' => 'Имя не должно начинаться с пробела!'
+                'message' => 'Имя не должно состоять только из пробелов!'
             ];
         }
 
@@ -148,6 +148,23 @@ class SignService
                 }
             }
         }
+
+        if (count($tmp) === 0) {
+            return [
+                'title' => 'Добавление признака',
+                'message' => 'Введены некорректные данные!'
+            ];
+        }
+
+        foreach ($tmp as $item) {
+            if (trim($item) === '') {
+                return [
+                    'title' => 'Добавление признака',
+                    'message' => 'Введены некорректные данные!'
+                ];
+            }
+        }
+
         foreach ($tmp as $item) {
             $signBind = new SignBind();
             $signBind->setSign($sign);
@@ -159,6 +176,12 @@ class SignService
             'message' => 'Признак ' . $name . ' успешно добавлен!'
         ];
     }
+
+    /**
+     * @return array]
+     * нельзя иметь жанр полностью без признаков
+     *
+     */
 
     public function getSignSerialize(): array
     {
@@ -204,7 +227,7 @@ class SignService
         $this->signRepository->remove($sign);
         return [
             'title' => 'Удаление признака',
-            'message' => 'Жанр ' . $sign->getName() . ' успешно удален!'
+            'message' => 'Признак ' . $sign->getName() . ' успешно удален!'
         ];
     }
 

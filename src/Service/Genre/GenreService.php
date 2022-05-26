@@ -63,7 +63,7 @@ class GenreService
 
     public function addNewGenre(array $formData): array
     {
-        if (count($formData) === 0) {
+        if (count($formData) < 2) {
             return [
                 'title' => 'Добавление жанра',
                 'message' => 'У жанра должен быть хотя бы один признак!'
@@ -73,7 +73,7 @@ class GenreService
         if (empty($name)) {
             return [
                 'title' => 'Добавление жанра',
-                'message' => 'Имя не должно начинаться с пробела!'
+                'message' => 'Имя не должно состоять только из пробелов!'
             ];
         }
 

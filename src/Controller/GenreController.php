@@ -58,7 +58,7 @@ class GenreController extends AbstractController
         $form = $this->createFormBuilder();
         $form->add('name',
             TextType::class, [
-                'label' => 'Название класса: ',
+                'label' => 'Название жанра: ',
                 'attr' => ['class' => "form-floating"]
             ]);
         $form = $this->formService->makeGenreForm($form, 'Создать жанр');
